@@ -5,5 +5,7 @@ namespace MP.ApiDotnet6.Application.Services.Interface
     public interface IPersonService
     {
          Task<ResultService<PersonDTO>> CreateAsync(PersonDTO personDTO);
+
+         Task<ResultService<PersonDTO>> GetByIdAsync(int id);
     }
 }

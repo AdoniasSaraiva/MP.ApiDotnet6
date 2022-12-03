@@ -13,9 +13,17 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
         }
         public async Task<Person> CreateAsync(Person person)
         {
-            _db.Add(person);
-            await _db.SaveChangesAsync();
-            return person;
+            try
+            {
+                _db.Add(person);
+                await _db.SaveChangesAsync();
+                return person;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         public async Task DeleteAsync(Person person)

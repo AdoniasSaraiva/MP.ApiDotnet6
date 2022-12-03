@@ -9,16 +9,22 @@ using MP.ApiDotnet6.Infra.Data.Repositories;
 using MP.ApiDotNet6.Domain.Repositories;
 
 namespace MP.ApiDotnet6.Infra.IoC
-{
+{ 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection service, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            //service.AddDbContext<ApplicationContextDb>(options => options.UseNpgsql(configuration.GetConnectionString("")));
-            
-            service.AddScoped<IPersonRepository, PersonRepository>();
+            try
+            {
+                services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), providerOptions => providerOptions.EnableRetryOnFailure()));
+                services.AddScoped<IPersonRepository, PersonRepository>();
 
-            return service;
+                return services;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static IServiceCollection AddServices(this IServiceCollection service, IConfiguration configuration)
@@ -28,5 +34,6 @@ namespace MP.ApiDotnet6.Infra.IoC
 
             return service;
         }
+
     }
 }

@@ -31,5 +31,14 @@ namespace MP.ApiDotnet6.Application.Services
             var data = await _personRepository.CreateAsync(person);
             return ResultService.OK<PersonDTO>(_mapper.Map<PersonDTO>(data));
         }
+
+        public async Task<ResultService<PersonDTO>> GetByIdAsync(int id)
+        {
+            if (id == 0)
+                return ResultService.Fail<PersonDTO>("Objeto deve ser informado");
+            
+            var data = await _personRepository.GetByIdAsync(id);
+            return ResultService.OK<PersonDTO>(_mapper.Map<PersonDTO>(data));
+        }
     }
 }

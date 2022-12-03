@@ -17,13 +17,13 @@ namespace MP.ApiDotNet6.Domain.Entities
             Purchases = new List<Purchase>();
         }
 
-        public Person(int id, string name, string document, string phone)
-        {
-            DomainValidationException.When(id <= 0, "Id deve ser maior que 0");
-            Validation(name, document, phone);
-            Id = id;
-            Purchases = new List<Purchase>();
-        }
+        //public Person(int id, string name, string document, string phone)
+        //{
+        //    //DomainValidationException.When(id <= 0, "Id deve ser maior que 0");
+        //    Validation(name, document, phone);
+        //    Id = id;
+        //    Purchases = new List<Purchase>();
+        //}
 
         private void Validation(string name, string document, string phone)
         {
