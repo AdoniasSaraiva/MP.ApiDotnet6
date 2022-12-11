@@ -21,11 +21,10 @@ namespace MP.ApiDotnet6.API.Controllers
         }
 
         [HttpPost("MetodoPost")]
-        public async Task<ActionResult> Post([FromBody] Object data)
+        public async Task<ActionResult> Post(PersonDTO personDTO)
         {
             try
             {
-                PersonDTO personDTO = JsonSerializer.Deserialize<PersonDTO>(data.ToString());
                 var result = await _personService.CreateAsync(personDTO);
 
                 if (result.IsSuccess)
@@ -39,13 +38,13 @@ namespace MP.ApiDotnet6.API.Controllers
             }
         }
 
-        [HttpPost("MetodoGet")]
-        public async Task<ActionResult> GetAsync([FromBody] Object data)
+        [HttpGet("GetAsync")]
+        public async Task<ActionResult> GetAsync()
         {
             try
             {
-                PersonDTO personDTO = JsonSerializer.Deserialize<PersonDTO>(data.ToString());
-                var result = await _personService.GetByIdAsync(personDTO.Id);
+                var result = await _personService.GetAsync();
+
                 if (result.IsSuccess)
                     return Ok(result);
 
@@ -55,7 +54,60 @@ namespace MP.ApiDotnet6.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
 
+        [HttpGet("GetByIdAsync")]
+        public async Task<ActionResult> GetByIdAsync(PersonDTO personDTO)
+        {
+            try
+            {
+                var result = await _personService.GetByIdAsync(personDTO.Id);
+
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("EditAsync")]
+        public async Task<ActionResult> EditAsync(PersonDTO personDTO)
+        {
+            try
+            {
+                var result = await _personService.UpdateAsync(personDTO);
+
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("DeleteAsync")]
+        public async Task<ActionResult> DeleteAsync(PersonDTO personDTO)
+        {
+            try
+            {
+                var result = await _personService.DeleteAsync(personDTO.Id);
+
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -8,7 +8,8 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
     public class PersonRepository : IPersonRepository
     {
         private readonly ApplicationContextDb _db;
-        public PersonRepository(ApplicationContextDb db){
+        public PersonRepository(ApplicationContextDb db)
+        {
             _db = db;
         }
         public async Task<Person> CreateAsync(Person person)
@@ -23,7 +24,6 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
             {
                 throw ex;
             }
-            
         }
 
         public async Task DeleteAsync(Person person)
@@ -40,7 +40,7 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
 
         public async Task<Person> GetByIdAsync(int id)
         {
-            return await _db.People.FirstOrDefaultAsync(x => x.Id == id);   
+            return await _db.People.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<ICollection<Person>> GetPeopleAsync()
