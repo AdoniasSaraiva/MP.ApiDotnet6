@@ -23,6 +23,14 @@ namespace MP.ApiDotNet6.Domain.Entities
             DomainValidationException.When(id <= 0, "Deve informar um purchase com o Id válido");
             Id = id;
         }
+
+        public void Edit(int id, int productId, int personId)
+        {
+            Validation(productId, personId);
+            DomainValidationException.When(id <= 0, "Deve informar um purchase com o Id válido");
+            Id = id;
+        }
+
         private void Validation(int productId, int personId)
         {
             DomainValidationException.When(productId <= 0, "Deve informar um produto com o Id válido");

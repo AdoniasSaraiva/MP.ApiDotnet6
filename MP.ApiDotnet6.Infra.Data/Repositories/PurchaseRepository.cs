@@ -49,7 +49,6 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
                             .Include(x => x.Product)
                             .Include(x => x.Person)
                             .Where(x => x.PersonId == personId).ToListAsync();
-
         }
 
         public async Task<ICollection<Purchase>> GetByProductIdAsync(int productId)
@@ -58,8 +57,6 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
                             .Include(x => x.Product)
                             .Include(x => x.Person)
                             .Where(x => x.ProductId == productId).ToListAsync();
-
-
         }
 
         public async Task<ICollection<Purchase>> GetAllAsync()
