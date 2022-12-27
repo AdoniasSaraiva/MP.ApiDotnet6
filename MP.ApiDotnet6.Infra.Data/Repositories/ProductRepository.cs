@@ -37,7 +37,7 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
             return await _db.Products.FirstOrDefaultAsync(p => p.Id == id); 
         }
 
-        public async Task<ICollection<Product>> GetPeopleAsync()
+        public async Task<ICollection<Product>> GetAsync()
         {
             return await _db.Products.ToListAsync();
         }

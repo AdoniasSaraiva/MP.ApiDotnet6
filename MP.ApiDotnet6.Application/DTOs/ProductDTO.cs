@@ -10,7 +10,7 @@ namespace MP.ApiDotnet6.Application.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string CodErp { get; set; }
+        public string CodeErp { get; set; }
         public decimal Price { get; set; }
     }
 }

@@ -32,10 +32,11 @@ namespace MP.ApiDotNet6.Domain.Entities
         public Product(int id, string name, string codeErp, decimal price)
         {
             Validation(name, codeErp, price);
-            DomainValidationException.When(id <= 0, "O IdProduct deve ser informado ou maior que 0");
-            Id = id;
+            //DomainValidationException.When(id <= 0, "O IdProduct deve ser informado ou maior que 0");
+            ////Id = id;
         }
 
+        public Product() { }
 
     }
 }

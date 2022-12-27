@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MP.ApiDotnet6.Application.DTOs;
 using MP.ApiDotnet6.Application.Services.Interface;
-using Newtonsoft.Json;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace MP.ApiDotnet6.API.Controllers
 {
@@ -20,8 +15,8 @@ namespace MP.ApiDotnet6.API.Controllers
             _personService = personService;
         }
 
-        [HttpPost("MetodoPost")]
-        public async Task<ActionResult> Post(PersonDTO personDTO)
+        [HttpPost("CreatePersonAsync")]
+        public async Task<ActionResult> CreateProductAsync(PersonDTO personDTO)
         {
             try
             {

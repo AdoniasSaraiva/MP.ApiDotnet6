@@ -18,6 +18,7 @@ namespace MP.ApiDotnet6.Infra.IoC
             {
                 services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), providerOptions => providerOptions.EnableRetryOnFailure()));
                 services.AddScoped<IPersonRepository, PersonRepository>();
+                services.AddScoped<IProductRepository, ProductRepository>();
 
                 return services;
             }
@@ -31,9 +32,9 @@ namespace MP.ApiDotnet6.Infra.IoC
         {
             service.AddAutoMapper(typeof(DomainToDtoMapping));
             service.AddScoped<IPersonService, PersonService>();
+            service.AddScoped<IProductService, ProductService>();
 
             return service;
         }
-
     }
 }
