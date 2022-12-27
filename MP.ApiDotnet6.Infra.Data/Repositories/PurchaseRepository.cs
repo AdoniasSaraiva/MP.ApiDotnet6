@@ -39,7 +39,7 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
                             .Include(x => x.Product)
                             .Include(x => x.Person)
                             .FirstOrDefaultAsync(x => x.Id == id);
-
+             
             return purchase;
         }
 
