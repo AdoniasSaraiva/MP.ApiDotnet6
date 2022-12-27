@@ -14,16 +14,9 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
         }
         public async Task<Person> CreateAsync(Person person)
         {
-            try
-            {
-                _db.Add(person);
-                await _db.SaveChangesAsync();
-                return person;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _db.Add(person);
+            await _db.SaveChangesAsync();
+            return person;
         }
 
         public async Task DeleteAsync(Person person)
@@ -41,6 +34,11 @@ namespace MP.ApiDotnet6.Infra.Data.Repositories
         public async Task<Person> GetByIdAsync(int id)
         {
             return await _db.People.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<int> GetIdByDocumentAsync(string document)
+        {
+            return (await _db.People.FirstOrDefaultAsync(x => x.Document == document))?.Id ?? 0;
         }
 
         public async Task<ICollection<Person>> GetPeopleAsync()

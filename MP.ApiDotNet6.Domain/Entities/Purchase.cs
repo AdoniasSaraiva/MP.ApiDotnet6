@@ -20,13 +20,13 @@ namespace MP.ApiDotNet6.Domain.Entities
         public Purchase(int id, int productId, int personId)
         {
             Validation(productId, personId);
-            DomainValidationException.When(id <= 0, "Deve informar um purchase com o Id v�lido");
+            DomainValidationException.When(id <= 0, "Deve informar um purchase com o Id válido");
             Id = id;
         }
         private void Validation(int productId, int personId)
         {
-            DomainValidationException.When(productId <= 0, "Deve informar um produto com o Id v�lido");
-            DomainValidationException.When(personId <= 0, "Deve informar uma Person com o Id v�lido");
+            DomainValidationException.When(productId <= 0, "Deve informar um produto com o Id válido");
+            DomainValidationException.When(personId <= 0, "Deve informar uma Person com o Id válido");
 
             ProductId = productId;
             PersonId = personId;
