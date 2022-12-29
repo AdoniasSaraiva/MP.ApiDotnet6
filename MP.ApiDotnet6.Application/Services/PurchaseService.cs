@@ -13,12 +13,15 @@ namespace MP.ApiDotnet6.Application.Services
         private readonly IPersonRepository _personRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IMapper _mapper;
-        public PurchaseService(IProductRepository productRepository, IPersonRepository personRepository, IPurchaseRepository purchaseRepository, IMapper mapper)
+        private readonly IUnityOfWork _unityOfWork;
+
+        public PurchaseService(IProductRepository productRepository, IPersonRepository personRepository, IPurchaseRepository purchaseRepository, IMapper mapper, IUnityOfWork unityOfWork)
         {
             _productRepository = productRepository;
             _personRepository = personRepository;
             _purchaseRepository = purchaseRepository;
             _mapper = mapper;
+            _unityOfWork = unityOfWork;
         }
 
         public async Task<ResultService<PurchaseDTO>> CreatePurchaseAsync(PurchaseDTO purchaseDTO)
@@ -30,15 +33,34 @@ namespace MP.ApiDotnet6.Application.Services
             if (!validate.IsValid)
                 return ResultService.RequestError<PurchaseDTO>("Problema de validação", validate);
 
-            var product = await _productRepository.GetIdByCodErpAsync(purchaseDTO.CodErp);
-            var personId = await _personRepository.GetIdByDocumentAsync(purchaseDTO.Document);
+            try
+            {
+                await _unityOfWork.BeginTransaction();
 
-            var purchase = new Purchase(product, personId);
+                var productId = await _productRepository.GetIdByCodErpAsync(purchaseDTO.CodErp);
+                if (productId == 0) 
+                {
+                    var product = new Product(purchaseDTO.ProductName, purchaseDTO.CodErp, purchaseDTO.Price.Value);
+                    await _productRepository.CreateAsync(product);
+                    productId = product.Id;
+                }
 
-            var data = await _purchaseRepository.CreateAsync(purchase);
-            purchaseDTO.Id = data.Id;
+                var personId = await _personRepository.GetIdByDocumentAsync(purchaseDTO.Document);
 
-            return ResultService.OK<PurchaseDTO>(purchaseDTO);
+                var purchase = new Purchase(productId, personId);
+
+                var data = await _purchaseRepository.CreateAsync(purchase);
+                purchaseDTO.Id = data.Id;
+
+                await _unityOfWork.Commit();
+
+                return ResultService.OK<PurchaseDTO>(purchaseDTO);
+            }
+            catch (Exception ex)
+            {
+                await _unityOfWork.Rollback();
+                return ResultService.Fail<PurchaseDTO>(ex.Message);
+            }
         }
 
         public async Task<ResultService> DeleteAsync(int id)
@@ -54,7 +76,7 @@ namespace MP.ApiDotnet6.Application.Services
 
         public async Task<ResultService<ICollection<PurchaseDetailsDTO>>> GetAsync()
         {
-            var purchases = await _purchaseRepository.GetAllAsync(); 
+            var purchases = await _purchaseRepository.GetAllAsync();
             return ResultService.OK(_mapper.Map<ICollection<PurchaseDetailsDTO>>(purchases));
         }
 
@@ -63,7 +85,7 @@ namespace MP.ApiDotnet6.Application.Services
             var purchase = await _purchaseRepository.GetByIdAsync(id);
             if (purchase == null)
                 return ResultService.Fail<PurchaseDetailsDTO>("Compra não encontrada");
-             
+
             return ResultService.OK(_mapper.Map<PurchaseDetailsDTO>(purchase));
         }
 
@@ -83,11 +105,11 @@ namespace MP.ApiDotnet6.Application.Services
             var productId = await _productRepository.GetIdByCodErpAsync(purchaseDTO.CodErp);
             var personId = await _personRepository.GetIdByDocumentAsync(purchaseDTO.Document);
 
-            purchase.Edit(purchase.Id,productId, personId);
+            purchase.Edit(purchase.Id, productId, personId);
 
             await _purchaseRepository.EditAsync(purchase);
 
             return ResultService.OK(purchaseDTO);
         }
-    }   
+    }
 }

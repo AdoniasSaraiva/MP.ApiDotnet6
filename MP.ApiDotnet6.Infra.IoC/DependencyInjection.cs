@@ -9,24 +9,17 @@ using MP.ApiDotnet6.Infra.Data.Repositories;
 using MP.ApiDotNet6.Domain.Repositories;
 
 namespace MP.ApiDotnet6.Infra.IoC
-{ 
+{
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            try
-            {
-                services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), providerOptions => providerOptions.EnableRetryOnFailure()));
-                services.AddScoped<IPersonRepository, PersonRepository>();
-                services.AddScoped<IProductRepository, ProductRepository>();
-                services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-
-                return services;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            services.AddScoped<IUnityOfWork, UnityOfWork>();
+            return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection service, IConfiguration configuration)
