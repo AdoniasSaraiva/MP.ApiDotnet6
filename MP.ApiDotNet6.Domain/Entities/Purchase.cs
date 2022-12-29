@@ -1,4 +1,3 @@
-using System;
 using MP.ApiDotNet6.Domain.Entities.Validations;
 
 namespace MP.ApiDotNet6.Domain.Entities

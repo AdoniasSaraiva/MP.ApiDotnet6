@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using MP.ApiDotnet6.Application.DTOs;
 using MP.ApiDotNet6.Domain.Entities;
 

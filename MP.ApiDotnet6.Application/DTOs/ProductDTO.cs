@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MP.ApiDotnet6.Application.DTOs
+﻿namespace MP.ApiDotnet6.Application.DTOs
 {
     public class ProductDTO
     {
