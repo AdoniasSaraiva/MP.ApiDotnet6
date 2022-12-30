@@ -4,8 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using MP.ApiDotnet6.Application.Mappings;
 using MP.ApiDotnet6.Application.Services;
 using MP.ApiDotnet6.Application.Services.Interface;
+using MP.ApiDotnet6.Infra.Data.Authentication;
 using MP.ApiDotnet6.Infra.Data.Context;
 using MP.ApiDotnet6.Infra.Data.Repositories;
+using MP.ApiDotNet6.Domain.Authentication;
 using MP.ApiDotNet6.Domain.Repositories;
 
 namespace MP.ApiDotnet6.Infra.IoC
@@ -18,7 +20,10 @@ namespace MP.ApiDotnet6.Infra.IoC
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-            services.AddScoped<IUnityOfWork, UnityOfWork>();
+            services.AddScoped<IUnityOfWork, UnityOfWork>(); 
+            services.AddScoped<ITokenGenerator, TokenGenerator>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            
             return services;
         }
 
@@ -28,6 +33,7 @@ namespace MP.ApiDotnet6.Infra.IoC
             service.AddScoped<IPersonService, PersonService>();
             service.AddScoped<IProductService, ProductService>();
             service.AddScoped<IPurchaseService, PurchaseService>();
+            service.AddScoped<IUserService, UserService>();
 
             return service;
         }

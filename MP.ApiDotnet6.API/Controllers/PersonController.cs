@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MP.ApiDotnet6.Application.DTOs;
 using MP.ApiDotnet6.Application.Services.Interface;
 using MP.ApiDotNet6.Domain.FiltersDb;
 
 namespace MP.ApiDotnet6.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonController : ControllerBase
