@@ -1,6 +1,5 @@
 using MP.ApiDotnet6.Application.DTOs;
 using MP.ApiDotNet6.Domain.FiltersDb;
-using MP.ApiDotNet6.Domain.Repositories;
 
 namespace MP.ApiDotnet6.Application.Services.Interface
 {

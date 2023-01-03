@@ -9,21 +9,25 @@ namespace MP.ApiDotNet6.Domain.Entities
         public string Document { get; private set; }
         public string Phone { get; private set; }
 
-        public ICollection<Purchase> Purchases{ get;set; }
+        public ICollection<Purchase> Purchases { get; set; }
+
+        public ICollection<PersonImage> PersonImages { get; private set; }
 
         public Person(string name, string document, string phone)
         {
             Validation(name, document, phone);
             Purchases = new List<Purchase>();
+            PersonImages = new List<PersonImage>();
         }
 
-        //public Person(int id, string name, string document, string phone)
-        //{
-        //    //DomainValidationException.When(id <= 0, "Id deve ser maior que 0");
-        //    Validation(name, document, phone);
-        //    Id = id;
-        //    Purchases = new List<Purchase>();
-        //}
+        public Person(int id, string name, string document, string phone)
+        {
+            DomainValidationException.When(id <= 0, "Id deve ser maior que 0");
+            Validation(name, document, phone);
+            Id = id;
+            Purchases = new List<Purchase>();
+            PersonImages = new List<PersonImage>();
+        }
 
         private void Validation(string name, string document, string phone)
         {

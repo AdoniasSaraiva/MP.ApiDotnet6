@@ -14,6 +14,8 @@ namespace MP.ApiDotnet6.Infra.Data.Maps
             builder.Property(u => u.Id).HasColumnName("UserId");
             builder.Property(u => u.Email).HasColumnName("Email");
             builder.Property(u => u.Password).HasColumnName("PassWord");
+
+            builder.HasMany(x => x.UserPermissions).WithOne(p => p.User).HasForeignKey(p => p.UserId);
         }
     }
 }
