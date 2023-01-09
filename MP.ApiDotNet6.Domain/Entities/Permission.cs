@@ -10,7 +10,7 @@ namespace MP.ApiDotNet6.Domain.Entities
             UserPermissions = new List<UserPermission>();
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string VisualName { get; set; }
         public string PermissionName { get; set; }
         public ICollection<UserPermission> UserPermissions { get; set; }

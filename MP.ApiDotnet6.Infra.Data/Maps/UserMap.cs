@@ -8,10 +8,10 @@ namespace MP.ApiDotnet6.Infra.Data.Maps
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("user");
+            builder.ToTable("User");
 
             builder.HasKey(x => x.Id);
-            builder.Property(u => u.Id).HasColumnName("UserId");
+            builder.Property(u => u.Id).HasColumnName("UserId").ValueGeneratedOnAdd();
             builder.Property(u => u.Email).HasColumnName("Email");
             builder.Property(u => u.Password).HasColumnName("PassWord");
 

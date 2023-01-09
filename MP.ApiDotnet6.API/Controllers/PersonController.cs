@@ -2,116 +2,114 @@
 using Microsoft.AspNetCore.Mvc;
 using MP.ApiDotnet6.Application.DTOs;
 using MP.ApiDotnet6.Application.Services.Interface;
+using MP.ApiDotNet6.Domain.Authentication;
 using MP.ApiDotNet6.Domain.FiltersDb;
+using System.Collections.Generic;
 
 namespace MP.ApiDotnet6.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class PersonController : BaseController
     {
         private readonly IPersonService _personService;
+        private readonly ICurrentUser _currentUser;
+        private List<string> _permissionNeeded = new List<string>() { "Admin" };
+        private readonly List<string> _permissionUser;
 
-        public PersonController(IPersonService personService)
+
+        public PersonController(IPersonService personService, ICurrentUser currentUser)
         {
             _personService = personService;
+            _currentUser = currentUser;
+            _permissionUser = _currentUser.Permissions?.Split(",").ToList() ?? new List<string>();
         }
 
         [HttpPost("CreatePersonAsync")]
-        public async Task<ActionResult> CreateProductAsync(PersonDTO personDTO)
+        public async Task<IActionResult> CreateProductAsync(PersonDTO personDTO)
         {
-            try
-            {
-                var result = await _personService.CreateAsync(personDTO);
+            _permissionNeeded.Add("CreatePerson");
+            if (!ValidatePermission(_permissionUser, _permissionNeeded))
+                return Forbidden();
 
-                if (result.IsSuccess)
-                    return Ok(result);
+            var result = await _personService.CreateAsync(personDTO);
 
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpGet("GetAsync")]
-        public async Task<ActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync()
         {
-            try
-            {
-                var result = await _personService.GetAsync();
+            _permissionNeeded.Add("GetPerson");
+            if (!ValidatePermission(_permissionUser, _permissionNeeded))
+                return Forbidden();
 
-                if (result.IsSuccess)
-                    return Ok(result);
+            var result = await _personService.GetAsync();
 
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
+
         }
 
         [HttpGet("GetByIdAsync")]
-        public async Task<ActionResult> GetByIdAsync(PersonDTO personDTO)
+        public async Task<IActionResult> GetByIdAsync(PersonDTO personDTO)
         {
-            try
-            {
-                var result = await _personService.GetByIdAsync(personDTO.Id);
+            _permissionNeeded.Add("GetPerson");
+            if (!ValidatePermission(_permissionUser, _permissionNeeded))
+                return Forbidden();
 
-                if (result.IsSuccess)
-                    return Ok(result);
+            var result = await _personService.GetByIdAsync(personDTO.Id);
 
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpPut("EditAsync")]
-        public async Task<ActionResult> EditAsync(PersonDTO personDTO)
+        public async Task<IActionResult> EditAsync(PersonDTO personDTO)
         {
-            try
-            {
-                var result = await _personService.UpdateAsync(personDTO);
+            _permissionNeeded.Add("UpdatePerson");
+            if (!ValidatePermission(_permissionUser, _permissionNeeded))
+                return Forbidden();
 
-                if (result.IsSuccess)
-                    return Ok(result);
+            var result = await _personService.UpdateAsync(personDTO);
 
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpDelete("DeleteAsync")]
-        public async Task<ActionResult> DeleteAsync(PersonDTO personDTO)
+        public async Task<IActionResult> DeleteAsync(PersonDTO personDTO)
         {
-            try
-            {
-                var result = await _personService.DeleteAsync(personDTO.Id);
+            _permissionNeeded.Add("DeletePerson");
+            if (!ValidatePermission(_permissionUser, _permissionNeeded))
+                return Forbidden();
 
-                if (result.IsSuccess)
-                    return Ok(result);
+            var result = await _personService.DeleteAsync(personDTO.Id);
 
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         [HttpGet]
         [Route("paged")]
-        public async Task<ActionResult> GetPagedAsync([FromQuery] PersonFilterDb personFilterDb)
+        public async Task<IActionResult> GetPagedAsync([FromQuery] PersonFilterDb personFilterDb)
         {
+            _permissionNeeded.Add("GetPerson");
+            if (!ValidatePermission(_permissionUser, _permissionNeeded))
+                return Forbidden();
+
             var result = await _personService.GetPagedAsync(personFilterDb);
             if (result.IsSuccess)
                 return Ok(result);

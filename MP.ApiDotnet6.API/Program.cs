@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MP.ApiDotnet6.API.Authentication;
 using MP.ApiDotnet6.Infra.IoC;
+using MP.ApiDotNet6.Domain.Authentication;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -46,8 +48,12 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+
 builder.Services.AddMvc().AddJsonOptions(options => { options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; });
 
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("projetoDoNetCore6"));
